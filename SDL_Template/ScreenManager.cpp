@@ -16,7 +16,6 @@ void ScreenManager::Release() {
 }
 
 void ScreenManager::Update() {
-	mBackgroundStars->Update();
 
 	switch (mCurrentScreen) {
 	case Start:
@@ -24,7 +23,6 @@ void ScreenManager::Update() {
 
 		if (mInput->KeyPressed(SDL_SCANCODE_RETURN)) {
 			mCurrentScreen = Play;
-			mStartScreen->ResetAnimation();
 			mPlayScreen->StartNewGame();
 		}
 		break;
@@ -38,7 +36,6 @@ void ScreenManager::Update() {
 }
 
 void ScreenManager::Render() { 
-	mBackgroundStars->Render();
 
 	switch (mCurrentScreen) {
 	case Start:
@@ -53,7 +50,6 @@ void ScreenManager::Render() {
 ScreenManager::ScreenManager() {
 	mInput = InputManager::Instance();
 
-	mBackgroundStars = BackgroundStars::Instance();
 	mStartScreen = new StartScreen();
 	mPlayScreen = new PlayScreen();
 
@@ -62,9 +58,6 @@ ScreenManager::ScreenManager() {
 
 ScreenManager::~ScreenManager() {
 	mInput = nullptr;
-
-	BackgroundStars::Release();
-	mBackgroundStars = nullptr;
 
 	delete mStartScreen;
 	mStartScreen = nullptr;

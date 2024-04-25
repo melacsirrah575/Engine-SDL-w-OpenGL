@@ -7,14 +7,12 @@ private:
 	Timer * mTimer;
 	AudioManager * mAudio;
 
-	BackgroundStars * mStars;
-
 	PlaySideBar * mSideBar;
 
-	Texture * mStartLabel;
+	//Texture * mStartLabel;
 
-	float mLevelStartTimer;
-	float mLevelStartDelay;
+	//float mLevelStartTimer;
+	//float mLevelStartDelay;
 
 	bool mGameStarted;
 

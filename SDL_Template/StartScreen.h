@@ -2,7 +2,6 @@
 #define __STARTSCREEN_H
 #include "AnimatedGLTexture.h"
 #include "InputManager.h"
-#include "BackgroundStars.h"
 #include "Scoreboard.h"
 
 using namespace SDLFramework;
@@ -15,16 +14,7 @@ private:
 
 	// Top Bar Entities
 	GameEntity * mTopBar;
-	GLTexture * mPlayerOne;
-	GLTexture * mPlayerTwo;
 	GLTexture * mHiScore;
-	Scoreboard * mPlayerOneScore;
-	Scoreboard * mPlayerTwoScore;
-	Scoreboard * mTopScore;
-
-	// Logo Entities
-	Texture * mLogo;
-	AnimatedGLTexture * mAnimatedLogo;
 
 	// Play Mode Entities
 	GameEntity * mPlayModes;
@@ -35,27 +25,9 @@ private:
 	Vector2 mCursorOffset;
 	int mSelectedMode;
 
-	// Bottom Bar Entities
-	GameEntity * mBottomBar;
-	GLTexture * mNamco;
-	GLTexture * mDates;
-	GLTexture * mRights;
-
-	// Screen Animation Variables
-	Vector2 mAnimationStartPos;
-	Vector2 mAnimationEndPos;
-	float mAnimationTotalTime;
-	float mAnimationTimer;
-	bool mAnimationDone;
-
-	// stars
-	BackgroundStars * mStars;
-
 public:
 	StartScreen();
 	~StartScreen();
-
-	void ResetAnimation();
 
 	int SelectedMode();
 

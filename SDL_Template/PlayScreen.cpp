@@ -2,7 +2,7 @@
 
 void PlayScreen::StartNextLevel() {
 	mCurrentStage += 1;
-	mLevelStartTimer = 0.0f;
+	//mLevelStartTimer = 0.0f;
 	mLevelStarted = true;
 	
 	delete mLevel;
@@ -13,39 +13,30 @@ PlayScreen::PlayScreen() {
 	mTimer = Timer::Instance();
 	mAudio = AudioManager::Instance();
 
-	mStars = BackgroundStars::Instance();
-
 	mSideBar = new PlaySideBar();
 	mSideBar->Parent(this);
 	mSideBar->Position(Graphics::SCREEN_WIDTH * 0.87f, Graphics::SCREEN_HEIGHT * 0.05f);
 
-	mStartLabel = new GLTexture("START", "emulogic.ttf", 32, { 150, 0, 0 });
-	mStartLabel->Parent(this);
-	mStartLabel->Position(Graphics::SCREEN_WIDTH * 0.4f, Graphics::SCREEN_HEIGHT * 0.5f);
+	//mStartLabel = new GLTexture("START", "emulogic.ttf", 32, { 150, 0, 0 });
+	//mStartLabel->Parent(this);
+	//mStartLabel->Position(Graphics::SCREEN_WIDTH * 0.4f, Graphics::SCREEN_HEIGHT * 0.5f);
 
 	mLevel = nullptr;
-	mLevelStartDelay = 1.0f;
+	//mLevelStartDelay = 1.0f;
 	mLevelStarted = false;
 
 	mPlayer = nullptr;
-
-	Enemy::CreatePaths();
-	Wasp::CreateDivePaths();
-	Butterfly::CreateDivePaths();
-	Boss::CreateDivePaths();
 }
 
 PlayScreen::~PlayScreen() {
 	mTimer = nullptr;
 	mAudio = nullptr;
 
-	mStars = nullptr;
-
 	delete mSideBar;
 	mSideBar = nullptr;
 
-	delete mStartLabel;
-	mStartLabel = nullptr;
+	//delete mStartLabel;
+	//mStartLabel = nullptr;
 
 	delete mLevel;
 	mLevel = nullptr;
@@ -61,17 +52,15 @@ void PlayScreen::StartNewGame() {
 	mPlayer->Position(Graphics::SCREEN_WIDTH * 0.4f, Graphics::SCREEN_HEIGHT * 0.8f);
 	mPlayer->Active(false);
 
-	mSideBar->SetHighScore(30000);
-	mSideBar->SetShips(mPlayer->Lives());
-	mSideBar->SetPlayerScore(mPlayer->Score());
-	mSideBar->SetLevel(0);
+	//mSideBar->SetHighScore(30000);
+	//mSideBar->SetShips(mPlayer->Lives());
+	//mSideBar->SetPlayerScore(mPlayer->Score());
+	//mSideBar->SetLevel(0);
 
-	mStars->Scroll(false);
 	mGameStarted = false;
 	mLevelStarted = false;
-	mLevelStartTimer = 0.0f;
+	//mLevelStartTimer = 0.0f;
 	mCurrentStage = 0;
-	mAudio->PlayMusic("MUS/GameStart.wav", 0);
 }
 
 bool PlayScreen::GameOver() {
@@ -80,25 +69,26 @@ bool PlayScreen::GameOver() {
 
 void PlayScreen::Update() {
 	if (mGameStarted) {
-		if (!mLevelStarted) {
-			mLevelStartTimer += mTimer->DeltaTime();
-			if (mLevelStartTimer >= mLevelStartDelay) {
-				StartNextLevel();
-			}
+		//Setting StartNextLevel to a Debug key because every game will want to call this differently
+		if (InputManager::Instance()->KeyPressed(SDL_SCANCODE_L)) {
+			StartNextLevel();
 		}
 		else {
+			if (mLevel == nullptr) {
+				StartNextLevel();
+			}
 			mLevel->Update();
 			if (mLevel->State() == Level::Finished) {
 				mLevelStarted = false;
 			}
 		}
 
-		if (mCurrentStage > 0) {
-			mSideBar->Update();
-		}
+		//if (mCurrentStage > 0) {
+		//	mSideBar->Update();
+		//}
 
 		mPlayer->Update();
-		mSideBar->SetPlayerScore(mPlayer->Score());
+		//mSideBar->SetPlayerScore(mPlayer->Score());
 	}
 	else {
 		if (!Mix_PlayingMusic()) {
@@ -108,9 +98,9 @@ void PlayScreen::Update() {
 }
 
 void PlayScreen::Render() {
-	if (!mGameStarted) {
-		mStartLabel->Render();
-	}
+	//if (!mGameStarted) {
+	//	mStartLabel->Render();
+	//}
 
 	if (mGameStarted) {
 

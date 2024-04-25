@@ -12,7 +12,6 @@ private:
 
 	InputManager * mInput;
 
-	BackgroundStars * mBackgroundStars;
 	StartScreen * mStartScreen;
 	PlayScreen * mPlayScreen;
 
