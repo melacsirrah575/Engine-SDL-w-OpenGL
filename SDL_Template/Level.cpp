@@ -1,16 +1,5 @@
 #include "Level.h"
 
-void Level::HandleStartLabels() {
-	if (mStage > 1) {
-		StartStage();
-	}
-	else {
-			StartStage();
-			mPlayer->Active(true);
-			mPlayer->Visible(true);
-	}
-}
-
 void Level::HandleCollisions() {
 	if (!mPlayerHit) {
 		if (mPlayer->WasHit()) {
@@ -51,11 +40,9 @@ void Level::StartStage() {
 	mStageStarted = true;
 }
 
-Level::Level(int stage, PlaySideBar * sideBar, Player * player) {
+Level::Level(Player * player) {
 	mTimer = Timer::Instance();
-	mSideBar = sideBar;
 
-	mStage = stage;
 	mStageStarted = false;
 
 	mPlayer = player;
@@ -77,7 +64,6 @@ Level::Level(int stage, PlaySideBar * sideBar, Player * player) {
 
 Level::~Level() {
 	mTimer = nullptr;
-	mSideBar = nullptr;
 
 	mPlayer = nullptr;
 
@@ -90,16 +76,10 @@ Level::LevelStates Level::State() {
 }
 
 void Level::Update() {
-	if (!mStageStarted) {
-		HandleStartLabels();
-	}
-	else {
+	HandleCollisions();
 
-		HandleCollisions();
-
-		if (mPlayerHit) {
-			HandlePlayerDeath();
-		}
+	if (mPlayerHit) {
+		HandlePlayerDeath();
 	}
 }
 

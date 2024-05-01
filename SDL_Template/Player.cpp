@@ -3,35 +3,37 @@
 #include "PhysicsManager.h"
 
 void Player::HandleMovement() {
-	if (mInput->KeyDown(SDL_SCANCODE_RIGHT)) {
+	if (mInput->KeyDown(SDL_SCANCODE_RIGHT) || mInput->KeyDown(SDL_SCANCODE_D)) {
 		Translate(Vec2_Right * mMoveSpeed * mTimer->DeltaTime(), World);
 	}
-	else if (mInput->KeyDown(SDL_SCANCODE_LEFT)) {
+	else if (mInput->KeyDown(SDL_SCANCODE_LEFT) || mInput->KeyDown(SDL_SCANCODE_A)) {
 		Translate(-Vec2_Right * mMoveSpeed * mTimer->DeltaTime(), World);
 	}
 
-	Vector2 pos = Position(Local);
-	if (pos.x < mMoveBounds.x) {
-		pos.x = mMoveBounds.x;
+	if (mInput->KeyDown(SDL_SCANCODE_UP) || mInput->KeyDown(SDL_SCANCODE_W)) {
+		Translate(-Vec2_Up * mMoveSpeed * mTimer->DeltaTime(), World);
 	}
-	else if (pos.x > mMoveBounds.y) {
-		pos.x = mMoveBounds.y;
+	else if (mInput->KeyDown(SDL_SCANCODE_DOWN) || mInput->KeyDown(SDL_SCANCODE_S)) {
+		Translate(Vec2_Up * mMoveSpeed * mTimer->DeltaTime(), World);
+	}
+
+	Vector2 pos = Position(Local);
+	if (pos.x < mXMoveBounds.x) {
+		pos.x = mXMoveBounds.x;
+	}
+	else if (pos.x > mXMoveBounds.y) {
+		pos.x = mXMoveBounds.y;
+	}
+	if (pos.y < mYMoveBounds.x) {
+		pos.y = mYMoveBounds.x;
+	}
+	else if (pos.y > mYMoveBounds.y) {
+		pos.y = mYMoveBounds.y;
 	}
 
 	Position(pos);
 }
 
-void Player::HandleFiring() {
-	if (mInput->KeyPressed(SDL_SCANCODE_SPACE)) {
-		for (int i = 0; i < MAX_BULLETS; ++i) {
-			if (!mBullets[i]->Active()) {
-				mBullets[i]->Fire(Position());
-				mAudio->PlaySFX("SFX/Fire.wav");
-				break;
-			}
-		}
-	}
-}
 
 Player::Player() {
 	mTimer = Timer::Instance();
@@ -45,25 +47,15 @@ Player::Player() {
 	mScore = 0;
 	mLives = 2;
 	
-	mShip = new GLTexture("PlayerShips.png", 0, 0, 60, 64);
-	mShip->Parent(this);
-	mShip->Position(Vec2_Zero);
+	mPlayerTexture = nullptr;
 
 	mMoveSpeed = 300.0f;
-	mMoveBounds = Vector2(0.0f, 800.0f);
+	mXMoveBounds = Vector2(0.0f, Graphics::SCREEN_WIDTH);
+	mYMoveBounds = Vector2(0.0f, Graphics::SCREEN_HEIGHT);
 
-	mDeathAnimation = new AnimatedGLTexture("PlayerExplosion.png", 0, 0, 128, 128, 4, 1.0f, Animation::Layouts::Horizontal);
-	mDeathAnimation->Parent(this);
-	mDeathAnimation->Position(Vec2_Zero);
-	mDeathAnimation->SetWrapMode(Animation::WrapModes::Once);
-
-	for (int i = 0; i < MAX_BULLETS; ++i) {
-		mBullets[i] = new Bullet(true);
-	}
+	mDeathAnimation = nullptr;
 
 	AddCollider(new BoxCollider(Vector2(16.0f, 67.0f)));
-	AddCollider(new BoxCollider(Vector2(20.0f, 37.0f)), Vector2( 18.0f, 10.0f));
-	AddCollider(new BoxCollider(Vector2(20.0f, 37.0f)), Vector2(-18.0f, 10.0f));
 
 	mId = PhysicsManager::Instance()->RegisterEntity(this, PhysicsManager::CollisionLayers::Friendly);
 }
@@ -73,15 +65,11 @@ Player::~Player() {
 	mInput = nullptr;
 	mAudio = nullptr;
 
-	delete mShip;
-	mShip = nullptr;
+	delete mPlayerTexture;
+	mPlayerTexture = nullptr;
 
 	delete mDeathAnimation;
 	mDeathAnimation = nullptr;
-
-	for (auto b : mBullets) {
-		delete b;
-	}
 }
 
 void Player::Visible(bool visible) {
@@ -111,9 +99,6 @@ bool Player::IgnoreCollisions()
 
 void Player::Hit(PhysEntity * other) {
 	mLives -= 1;
-	mAnimating = true;
-	mDeathAnimation->ResetAnimation();
-	mAudio->PlaySFX("SFX/PlayerExplosion.wav");
 	mWasHit = true;
 }
 
@@ -122,39 +107,14 @@ bool Player::WasHit() {
 }
 
 void Player::Update() {
-	if (mAnimating) {
 
-		if (mWasHit) {
-			mWasHit = false;
-		}
-
-		mDeathAnimation->Update();
-		mAnimating = mDeathAnimation->IsAnimating();
-	}
-	else {
-		if (Active()) {
-			HandleMovement();
-			HandleFiring();
-		}
-	}
-
-	for (int i = 0; i < MAX_BULLETS; ++i) {
-		mBullets[i]->Update();
-	}
+	HandleMovement();
 }
 
 void Player::Render() {
 	if (mVisible) {
-		if (mAnimating) {
-			mDeathAnimation->Render();
-		}
-		else {
-			mShip->Render();
-		}
-	}
-
-	for (int i = 0; i < MAX_BULLETS; ++i) {
-		mBullets[i]->Render();
+		//Cannot currently render because texture is a nullptr!
+		//mPlayerTexture->Render();
 	}
 
 	PhysEntity::Render();

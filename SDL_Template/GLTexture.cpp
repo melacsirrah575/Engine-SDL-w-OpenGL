@@ -73,6 +73,7 @@ namespace SDLFramework {
 			Mode = GL_RGBA;
 		}
 
+		glPixelStorei(GL_UNPACK_ROW_LENGTH, Surface->pitch / Surface->format->BytesPerPixel);
 		glGenTextures(1, &ID);
 		glBindTexture(GL_TEXTURE_2D, ID);
 

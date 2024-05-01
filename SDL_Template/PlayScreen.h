@@ -7,18 +7,10 @@ private:
 	Timer * mTimer;
 	AudioManager * mAudio;
 
-	PlaySideBar * mSideBar;
-
-	//Texture * mStartLabel;
-
-	//float mLevelStartTimer;
-	//float mLevelStartDelay;
-
 	bool mGameStarted;
 
 	Level * mLevel;
 	bool mLevelStarted;
-	int mCurrentStage;
 
 	Player * mPlayer;
 

@@ -3,7 +3,7 @@
 #include "AnimatedGLTexture.h"
 #include "AudioManager.h"
 #include "InputManager.h"
-#include "Bullet.h"
+#include "PhysEntity.h"
 
 using namespace SDLFramework;
 
@@ -20,18 +20,15 @@ private:
 	int mScore;
 	int mLives;
 
-	Texture * mShip;
+	Texture * mPlayerTexture;
 	AnimatedGLTexture * mDeathAnimation;
 
 	float mMoveSpeed;
-	Vector2 mMoveBounds;
-
-	static const int MAX_BULLETS = 2;
-	Bullet * mBullets[MAX_BULLETS];
+	Vector2 mXMoveBounds;
+	Vector2 mYMoveBounds;
 
 private:
 	void HandleMovement();
-	void HandleFiring();
 
 public:
 	Player();

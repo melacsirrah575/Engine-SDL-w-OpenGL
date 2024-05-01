@@ -1,6 +1,5 @@
 #ifndef __LEVEL_H
 #define __LEVEL_H
-#include "PlaySideBar.h"
 #include "Player.h"
 #include "tinyxml2.h"
 
@@ -12,21 +11,9 @@ public:
 
 private:
 	Timer * mTimer;
-	PlaySideBar * mSideBar;
 
 	int mStage;
 	bool mStageStarted;
-
-	//float mLabelTimer;
-
-	//Texture * mStageLabel;
-	//Scoreboard * mStageNumber;
-	//float mStageLabelOnScreen;
-	//float mStageLabelOffScreen;
-
-	//Texture * mReadyLabel;
-	//float mReadyLabelOnScreen;
-	//float mReadyLabelOffScreen;
 
 	Player * mPlayer;
 	bool mPlayerHit;
@@ -43,12 +30,11 @@ private:
 
 private:
 	void StartStage();
-	void HandleStartLabels();
 	void HandleCollisions();
 	void HandlePlayerDeath();
 
 public:
-	Level(int stage, PlaySideBar * sideBar, Player * player);
+	Level(Player * player);
 	~Level();
 
 	LevelStates State();
